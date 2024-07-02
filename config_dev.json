@@ -1,0 +1,10 @@
+{
+  "API_TOKENS": [
+    "thisisdefaulttoken1",
+    "thisisdefaulttoken2"
+  ],
+  "SQLALCHEMY_DATABASE_URI": "sqlite:///database.db",
+  "EXAMPLES": {
+    "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:root@localhost/database"
+  }
+}
