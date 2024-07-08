@@ -3,7 +3,7 @@
     "thisisdefaulttoken1",
     "thisisdefaulttoken2"
   ],
-  "SQLALCHEMY_DATABASE_URI": "sqlite:///database.db",
+  "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:123456@cicdmeta-mysql-service:3306/cicdmeta",
   "EXAMPLES": {
     "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:root@localhost/database"
   }

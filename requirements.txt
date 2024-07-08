@@ -1,4 +1,7 @@
+gunicorn==22.0.0
+sqlalchemy==1.4.52
+pymysql==1.1.1
 Flask==2.2.5
 Flask-RESTful==0.3.10
-gunicorn==22.0.0
-
+flask_sqlalchemy==2.5.1
+flask-migrate==4.0.7
