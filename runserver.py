@@ -36,7 +36,9 @@ api = Api(app)
 class ConfigResource(Resource):
     def get(self):
         kvs = Config.query.all()
-        return {kv.key: kv.value for kv in kvs}
+        ret = {kv.key: kv.value for kv in kvs}
+        ret['version'] = "v0.1"
+        return ret
 
     def post(self):
 
