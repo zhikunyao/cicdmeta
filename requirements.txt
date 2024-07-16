@@ -1,6 +1,7 @@
 gunicorn==22.0.0
 sqlalchemy==1.4.52
 pymysql==1.1.1
+requests==2.31.0
 Flask==2.2.5
 Flask-RESTful==0.3.10
 flask_sqlalchemy==2.5.1

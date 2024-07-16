@@ -1,6 +1,7 @@
 from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
+import requests
 
 # 读取当前目录下的文件以加载敏感配置
 import os
@@ -38,6 +39,18 @@ class ConfigResource(Resource):
         kvs = Config.query.all()
         ret = {kv.key: kv.value for kv in kvs}
         ret['version'] = "v0.1"
+        url = 'http://demo4.cicdmeta.zilliz.cc/config'
+        response = requests.get(url)
+        route_status = f"{response.status_code}"
+        if response.status_code == 200:
+            data = response.json()
+            ret['route_json'] = data
+            ret['route_text'] = response.text
+            ret['route_headers'] = str(response.headers)
+        else:
+            pass
+        ret['route_url'] = url
+        ret['route_status'] = route_status
         return ret
 
     def post(self):
