@@ -3,6 +3,7 @@ from flask_restful import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 import requests
 
+
 # 读取当前目录下的文件以加载敏感配置
 import os
 import sys
@@ -53,10 +54,18 @@ class ServiceResource(Resource):
         ret["service"] = ["cloud-service", "backup-api", "cloud-meta"]
         return ret
 
+class RedisResource(Resource):
+    def get(self, param):
+        from rediscluster import RedisCluster
+        startup_nodes = [{"host": "cicdmeta-redis-redis-cluster", "port": 6379}]
+        redis_cluster = RedisCluster(startup_nodes=startup_nodes, password="YX17UHx4PP")
+        ret = redis_cluster.get(param)
+        return ret
 
 
 api.add_resource(ConfigResource, '/config')
 api.add_resource(ServiceResource, '/service')
+api.add_resource(ServiceResource, '/redis/<param>')
 
 if __name__ == '__main__':
     app.run(debug=True)
