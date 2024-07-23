@@ -54,15 +54,27 @@ class ServiceResource(Resource):
         ret["service"] = ["cloud-service", "backup-api", "cloud-meta"]
         return ret
 
+# used for demo
 class RedisResource(Resource):
     def get(self, param):
         from rediscluster import RedisCluster
         startup_nodes = [{"host": "cicdmeta-redis-redis-cluster", "port": 6379}]
         redis_cluster = RedisCluster(startup_nodes=startup_nodes, password="YX17UHx4PP")
         byte_data = redis_cluster.get(param)
-        ret = byte_data.decode('utf-8')
+        string_data = byte_data.decode('utf-8')
+        ret = {"key": param, "value": string_data}
         return ret
 
+    def post(self, param):
+        key = param
+        value = request.json['value']
+        from rediscluster import RedisCluster
+        startup_nodes = [{"host": "cicdmeta-redis-redis-cluster", "port": 6379}]
+        redis_cluster = RedisCluster(startup_nodes=startup_nodes, password="YX17UHx4PP")
+        byte_data = redis_cluster.set(key, value)
+        string_data = byte_data.decode('utf-8')
+        ret = {"msg": string_data, "key": param, "value": string_data}
+        return ret
 
 api.add_resource(ConfigResource, '/config')
 api.add_resource(ServiceResource, '/service')
