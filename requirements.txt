@@ -6,3 +6,5 @@ Flask==2.2.5
 Flask-RESTful==0.3.10
 flask_sqlalchemy==2.5.1
 flask-migrate==4.0.7
+redis==3.5.3
+redis-py-cluster==2.1.3
