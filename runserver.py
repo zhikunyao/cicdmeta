@@ -71,9 +71,8 @@ class RedisResource(Resource):
         from rediscluster import RedisCluster
         startup_nodes = [{"host": "cicdmeta-redis-redis-cluster", "port": 6379}]
         redis_cluster = RedisCluster(startup_nodes=startup_nodes, password="YX17UHx4PP")
-        byte_data = redis_cluster.set(key, value)
-        string_data = byte_data.decode('utf-8')
-        ret = {"msg": string_data, "key": param, "value": string_data}
+        bool_data = redis_cluster.set(key, value)
+        ret = {"msg": bool_data, "key": param, "value": string_data}
         return ret
 
 api.add_resource(ConfigResource, '/config')
