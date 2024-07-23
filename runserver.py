@@ -59,7 +59,8 @@ class RedisResource(Resource):
         from rediscluster import RedisCluster
         startup_nodes = [{"host": "cicdmeta-redis-redis-cluster", "port": 6379}]
         redis_cluster = RedisCluster(startup_nodes=startup_nodes, password="YX17UHx4PP")
-        ret = redis_cluster.get(param)
+        byte_data = redis_cluster.get(param)
+        ret = byte_data.decode('utf-8')
         return ret
 
 
