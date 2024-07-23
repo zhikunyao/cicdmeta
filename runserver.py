@@ -65,7 +65,7 @@ class RedisResource(Resource):
 
 api.add_resource(ConfigResource, '/config')
 api.add_resource(ServiceResource, '/service')
-api.add_resource(ServiceResource, '/redis/<param>')
+api.add_resource(RedisResource, '/redis/<param>')
 
 if __name__ == '__main__':
     app.run(debug=True)
