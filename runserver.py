@@ -39,31 +39,24 @@ class ConfigResource(Resource):
         kvs = Config.query.all()
         ret = {kv.key: kv.value for kv in kvs}
         ret['version'] = "v0.1"
-        url = 'http://demo4.cicdmeta.zilliz.cc/config'
-        response = requests.get(url)
-        route_status = f"{response.status_code}"
-        if response.status_code == 200:
-            data = response.json()
-            ret['route_json'] = data
-            ret['route_text'] = response.text
-            ret['route_headers'] = str(response.headers)
-        else:
-            pass
-        ret['route_url'] = url
-        ret['route_status'] = route_status
         return ret
 
     def post(self):
-
         new_config = Config(key=request.json['key'], value=request.json['value'])
         db.session.add(new_config)
         db.session.commit()
         return {"id":new_config.id, "key":new_config.key, "value":new_config.value}
 
+class ServiceResource(Resource):
+    def get(self):
+        ret = {}
+        ret["service"] = ["cloud-service", "backup-api", "cloud-meta"]
+        return ret
+
 
 
 api.add_resource(ConfigResource, '/config')
-
+api.add_resource(ServiceResource, '/service')
 
 if __name__ == '__main__':
     app.run(debug=True)
