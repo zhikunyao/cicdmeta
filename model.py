@@ -8,10 +8,22 @@ import sys
 import json
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(script_dir)
-with open(f'{script_dir}/config_dev.json', 'r') as f:
+# 获取环境变量设置配置文件
+if 'CICDMETA_ENV' in os.environ:
+    if os.environ['CICDMETA_ENV'] == 'prod':
+        config_name = "config_prod.json"
+    elif os.environ['CICDMETA_ENV'] == 'dev':
+        config_name = "config_dev.json"
+else:
+    config_name = "config_dev.json"
+
+with open(config_name, 'r') as f:
     config = json.load(f)
 # 读取特定 section 的特定 key 的值
 DB = config['SQLALCHEMY_DATABASE_URI']
+if os.environ.get('CICDMETA_ENV') == 'prod' and 'SECRET_MYSQL_PASSWORD' in os.environ and 'SECRET_MYSQL_USER' in os.environ:
+    DB = DB.replace("SECRET_MYSQL_PASSWORD", os.environ['SECRET_MYSQL_PASSWORD'])
+    DB = DB.replace("SECRET_MYSQL_USER", os.environ['SECRET_MYSQL_USER'])
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = DB
@@ -97,6 +109,16 @@ class ServiceEnvCluster(db.Model):
 
 class ServiceDeployHistory(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+
+class UserBindLane(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_name = db.Column(db.String(80), nullable=False)
+    lane_name = db.Column(db.String(80), nullable=False)
+    status = db.Column(db.String(20), nullable=False)
+    update_time = db.Column(db.DateTime, nullable=False)
+    # 记录锁定状态，status=locked，表示lane被锁定，不允许其他用户绑定
+    def __repr__(self):
+        return '<Username %r>' % self.user_name
 
 
 @app.cli.command()

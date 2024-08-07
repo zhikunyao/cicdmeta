@@ -3,7 +3,7 @@
     "thisisdefaulttoken1",
     "thisisdefaulttoken2"
   ],
-  "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:123456@cicdmeta-mysql-service:3306/cicdmeta",
+  "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://SECRET_MYSQL_USER:SECRET_MYSQL_PASSWORD@devops-cicd-instance-1.c0ybmd1el2xt.us-west-2.rds.amazonaws.com:3306/cicdmeta",
   "EXAMPLES": {
     "SQLALCHEMY_DATABASE_URI": "mysql+pymysql://root:root@localhost/database"
   }
