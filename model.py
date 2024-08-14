@@ -6,6 +6,7 @@ from flask_migrate import Migrate
 import os
 import sys
 import json
+import datetime
 script_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(script_dir)
 # 获取环境变量设置配置文件
@@ -87,9 +88,12 @@ class Service(db.Model):
 
 class ServiceEnv(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    service_env_name = db.Column(db.String(80), unique=True, nullable=False) # prod_milvusdb_arm, uat_milvusdb
-    service_name = db.Column(db.String(80), nullable=False) # 这个环境隶属于哪个服务，milvusdb
-    artifact_name = db.Column(db.String(80), nullable=False)  # 这个环境的镜像仓库
+    service_env_name = db.Column(db.String(80), unique=True, nullable=False) # 全局唯一，保留值有uat、prod等，避免新建
+    service_name = db.Column(db.String(80), nullable=False) # 这个环境有哪个服务，cloud-backup-provider等
+    # artifact_name = db.Column(db.String(80), nullable=False)  # 这个环境的镜像仓库,先删除避免出现多个cluster不一样镜像
+    deleted = db.Column(db.Boolean, nullable=False, default=False)
+    creator = db.Column(db.String(80), nullable=False)
+    update_time = db.Column(db.DateTime, nullable=False, default=datetime.datetime.now)
 
     attributes = db.Column(db.String(120), nullable=False)  # Json 格式扩展，可以通过Service继承部分配置
 
@@ -130,3 +134,4 @@ def initdb():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
+        #db.drop_all()
