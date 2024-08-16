@@ -1,5 +1,6 @@
 from flask import Flask, request
-from flask_restful import Resource, Api
+#from flask_restful import Resource, Api
+from flask_restx import Resource, Api
 from flask_sqlalchemy import SQLAlchemy
 
 import requests
@@ -15,7 +16,8 @@ from model import ServiceEnv, Config, UserBindLane
 
 api = Api(app)
 
-# Test资源
+# Test用的资源
+@api.route('/config')
 class ConfigResource(Resource):
     def get(self):
         kvs = Config.query.all()
@@ -29,12 +31,13 @@ class ConfigResource(Resource):
         db.session.commit()
         return {"id":new_config.id, "key":new_config.key, "value":new_config.value}
 
+@api.route('/service')
 class ServiceResource(Resource):
     def get(self):
         ret = {}
         ret["service"] = ["cloud-service", "backup-api", "cloud-meta"]
         return ret
-
+@api.route('/service_env')
 class ServiceEnvResource(Resource):
     def get(self):
         service_name = request.json.get('service') or "%"
@@ -91,7 +94,7 @@ class ServiceEnvResource(Resource):
             return {"result": "FAIL", "msg": "service_env not found"}
 
 
-
+@api.route('/user_bind_lane')
 class UserBindLaneResource(Resource):
     def get(self):
         ret = {}
@@ -131,6 +134,7 @@ class UserBindLaneResource(Resource):
 
 
 # used for demo
+@api.route('/redis/<param>')
 class RedisResource(Resource):
     def get(self, param):
         from rediscluster import RedisCluster
@@ -151,11 +155,11 @@ class RedisResource(Resource):
         ret = {"msg": bool_data, "key": param, "value": value}
         return ret
 
-api.add_resource(ConfigResource, '/config')
-api.add_resource(ServiceResource, '/service')
-api.add_resource(ServiceEnvResource, '/service_env')
-api.add_resource(UserBindLaneResource, '/user_bind_lane')
-api.add_resource(RedisResource, '/redis/<param>')
+#api.add_resource(ConfigResource, '/config')
+#api.add_resource(ServiceResource, '/service')
+#api.add_resource(ServiceEnvResource, '/service_env')
+#api.add_resource(UserBindLaneResource, '/user_bind_lane')
+#api.add_resource(RedisResource, '/redis/<param>')
 
 if __name__ == '__main__':
     app.run(debug=True)
