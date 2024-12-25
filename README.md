@@ -3,4 +3,4 @@
 # migrate
 flask --app model.py db init
 flask --app model.py db migrate
-flask --app model.py db upgrade
+flask --app model.py db upgradeadd some release
